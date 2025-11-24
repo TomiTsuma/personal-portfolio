@@ -1,0 +1,156 @@
+.topology-container {
+    margin: 4rem 0;
+    padding: 2rem;
+    background-color: #f8f9fa;
+    border-radius: 16px;
+    border: 1px solid #e9ecef;
+}
+
+.topology-diagram {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    position: relative;
+}
+
+.zone {
+    width: 100%;
+    border: 2px dashed #cbd5e0;
+    border-radius: 12px;
+    padding: 1.5rem;
+    position: relative;
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.zone-label {
+    position: absolute;
+    top: -12px;
+    left: 20px;
+    background-color: #f8f9fa;
+    padding: 0 10px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #6c757d;
+    text-transform: uppercase;
+}
+
+.external {
+    border-color: #a0aec0;
+}
+
+.dmz {
+    border-color: #ed8936;
+    background-color: rgba(237, 137, 54, 0.05);
+}
+
+.internal {
+    border-color: #48bb78;
+    background-color: rgba(72, 187, 120, 0.05);
+}
+
+.node {
+    background-color: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    min-width: 140px;
+}
+
+.node:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-color: var(--primary);
+}
+
+.node i {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    color: var(--primary);
+}
+
+.node span {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--dark);
+}
+
+.node small {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 0.2rem;
+}
+
+.connection-vertical {
+    width: 2px;
+    height: 30px;
+    background-color: #cbd5e0;
+    position: relative;
+}
+
+.connection-vertical::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: -4px;
+    width: 10px;
+    height: 10px;
+    background-color: #cbd5e0;
+    border-radius: 50%;
+}
+
+.nodes-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.node-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    background-color: rgba(0, 0, 0, 0.02);
+    padding: 1rem;
+    border-radius: 12px;
+}
+
+.sub-nodes {
+    display: flex;
+    gap: 1rem;
+}
+
+.proxmox {
+    border-color: #4299e1;
+    width: 100%;
+}
+
+.gpu {
+    border-color: #9f7aea;
+}
+
+.monitor {
+    border-color: #f56565;
+}
+
+.experiment {
+    border-color: #ed64a6;
+}
+
+@media (max-width: 768px) {
+    .nodes-grid {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .sub-nodes {
+        flex-direction: column;
+    }
+}

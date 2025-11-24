@@ -1,0 +1,186 @@
+.hero {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    align-items: center;
+    min-height: 80vh;
+    gap: 2rem;
+    padding-top: 2rem;
+}
+
+.badge {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--dark);
+    border-radius: 4px;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.badge::before,
+.badge::after {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background-color: var(--primary);
+    border: 1px solid var(--dark);
+}
+
+.badge::before {
+    top: -4px;
+    left: -4px;
+}
+
+.badge::after {
+    bottom: -4px;
+    right: -4px;
+}
+
+.wave {
+    display: inline-block;
+    animation: wave 2s infinite;
+}
+
+@keyframes wave {
+
+    0%,
+    100% {
+        transform: rotate(0deg);
+    }
+
+    50% {
+        transform: rotate(20deg);
+    }
+}
+
+.hero-description {
+    font-size: 1.1rem;
+    max-width: 500px;
+    margin-bottom: 2rem;
+}
+
+.hero-actions {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    margin-bottom: 3rem;
+}
+
+.social-links {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.social-links span {
+    font-weight: 600;
+}
+
+.social-links a {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+}
+
+.social-links a:hover {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: var(--light);
+}
+
+/* Image Section */
+.image-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.image-wrapper img {
+    width: 100%;
+    height: auto;
+    border-radius: 20px;
+    /* Or specific shape from design */
+    position: relative;
+    z-index: 2;
+    filter: grayscale(100%);
+    transition: var(--transition);
+}
+
+.image-wrapper img:hover {
+    filter: grayscale(0%);
+}
+
+.decorative-shape {
+    position: absolute;
+    bottom: -20px;
+    right: -20px;
+    width: 100%;
+    height: 100%;
+    background-color: var(--primary);
+    z-index: 1;
+    border-radius: 20px;
+}
+
+.scroll-down {
+    position: absolute;
+    bottom: 20px;
+    left: -60px;
+    z-index: 3;
+    background: white;
+    border-radius: 50%;
+}
+
+.circle-text {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    animation: rotate 10s linear infinite;
+}
+
+.center-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.5rem;
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (max-width: 768px) {
+    .hero {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .hero-actions {
+        justify-content: center;
+    }
+
+    .social-links {
+        justify-content: center;
+    }
+
+    .image-wrapper {
+        margin-top: 2rem;
+    }
+
+    .scroll-down {
+        display: none;
+    }
+}

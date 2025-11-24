@@ -1,0 +1,123 @@
+.lab-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+}
+
+.lab-section {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: var(--transition);
+}
+
+.lab-section:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.lab-section.full-width {
+    grid-column: 1 / -1;
+}
+
+.lab-section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    color: var(--dark);
+}
+
+.lab-section h2 i {
+    color: var(--primary);
+}
+
+.feature-list {
+    margin: 1.5rem 0;
+    list-style: none;
+}
+
+.feature-list li {
+    margin-bottom: 0.8rem;
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    position: relative;
+    padding-left: 1.2rem;
+}
+
+.feature-list li::before {
+    content: '•';
+    color: var(--primary);
+    position: absolute;
+    left: 0;
+    font-weight: bold;
+}
+
+.feature-list strong {
+    color: var(--dark);
+}
+
+.code-snippet {
+    background-color: #1e1e1e;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: 1.5rem;
+}
+
+.snippet-header {
+    background-color: #2d2d2d;
+    padding: 0.5rem 1rem;
+    color: #aaa;
+    font-size: 0.8rem;
+    font-family: monospace;
+    border-bottom: 1px solid #333;
+}
+
+.code-snippet pre {
+    padding: 1rem;
+    overflow-x: auto;
+    margin: 0;
+}
+
+.code-snippet code {
+    font-family: 'Courier New', Courier, monospace;
+    color: #e0e0e0;
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
+
+.recipe-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.recipe-card {
+    background-color: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+.recipe-card h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.recipe-card p {
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+    .lab-details {
+        grid-template-columns: 1fr;
+    }
+
+    .recipe-grid {
+        grid-template-columns: 1fr;
+    }
+}

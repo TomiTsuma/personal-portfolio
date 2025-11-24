@@ -1,0 +1,110 @@
+.research-section {
+    margin-bottom: 4rem;
+}
+
+.research-section h2 {
+    margin-bottom: 2rem;
+    font-size: 2rem;
+}
+
+.interests-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.interest-card {
+    background-color: var(--dark);
+    color: var(--light);
+    padding: 2rem;
+    border-radius: 12px;
+    transition: var(--transition);
+}
+
+.interest-card:hover {
+    transform: translateY(-5px);
+    background-color: var(--primary);
+    color: var(--dark);
+}
+
+.interest-card h3 {
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+}
+
+.interest-card p {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.interest-card:hover p {
+    color: var(--dark);
+}
+
+.papers-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.paper-card {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+    transition: var(--transition);
+    border-left: 4px solid var(--primary);
+}
+
+.paper-card:hover {
+    transform: translateX(10px);
+}
+
+.platform {
+    display: inline-block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.tags {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.tags span {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+.read-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    color: var(--dark);
+    white-space: nowrap;
+}
+
+.read-link:hover {
+    color: var(--primary);
+}
+
+@media (max-width: 768px) {
+    .paper-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .read-link {
+        align-self: flex-end;
+    }
+}
