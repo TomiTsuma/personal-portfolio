@@ -42,6 +42,11 @@ const Research = () => {
             area: "Computer Vision",
             details: "Medical imaging, object detection, and spectral analysis.",
             link: null
+        },
+        {
+            area: "Data Warehousing",
+            details: "Building production-grade data warehousing systems from first principles.",
+            link: "/research/data-warehousing"
         }
     ];
 

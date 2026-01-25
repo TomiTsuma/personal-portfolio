@@ -1,0 +1,194 @@
+.research-header {
+    margin-bottom: 3rem;
+    text-align: center;
+}
+
+.research-subtitle {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    max-width: 800px;
+    margin: 1rem auto 0;
+    line-height: 1.6;
+}
+
+.post-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.post-date {
+    font-size: 0.95rem;
+    color: var(--accent-color);
+    font-weight: 600;
+}
+
+.post-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.post-tags span {
+    background: var(--accent-bg);
+    color: var(--accent-color);
+    padding: 0.3rem 0.9rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.research-content {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.research-section {
+    margin-bottom: 3rem;
+}
+
+.research-section h2 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    color: var(--text-primary);
+    border-bottom: 3px solid var(--accent-color);
+    padding-bottom: 0.5rem;
+}
+
+.intro-text {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+.research-section p {
+    line-height: 1.8;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+/* Measures Grid */
+.measures-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.measure-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.measure-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    border-color: var(--accent-color);
+}
+
+.measure-icon {
+    font-size: 2rem;
+    color: var(--accent-color);
+    margin-bottom: 1rem;
+}
+
+.measure-card h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+    color: var(--text-primary);
+}
+
+.measure-card p {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    margin-bottom: 0;
+}
+
+.highlight-text {
+    background: var(--accent-bg);
+    border-left: 4px solid var(--accent-color);
+    padding: 1.5rem;
+    border-radius: 8px;
+    font-style: italic;
+    color: var(--text-primary);
+    margin: 2rem 0;
+}
+
+/* Decomposition List */
+.decomposition-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.decomposition-item {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.decomposition-item:hover {
+    border-color: var(--accent-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.decomposition-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.decomposition-header i {
+    font-size: 1.8rem;
+    color: var(--accent-color);
+}
+
+.decomposition-header h3 {
+    font-size: 1.3rem;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.decomposition-item p {
+    margin-left: 2.8rem;
+    margin-bottom: 0;
+}
+
+/* Conclusion Section */
+.conclusion-section {
+    background: linear-gradient(135deg, var(--accent-bg) 0%, transparent 100%);
+    border-radius: 12px;
+    padding: 2rem;
+    border: 1px solid var(--border-color);
+}
+
+.conclusion-section h2 {
+    border-bottom: none;
+}
+
+@media (max-width: 768px) {
+    .measures-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .decomposition-item p {
+        margin-left: 0;
+        margin-top: 1rem;
+    }
+
+    .decomposition-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

@@ -7,6 +7,8 @@ import Experience from './pages/Experience';
 import Entrepreneurship from './pages/Entrepreneurship';
 import Research from './pages/Research';
 import GNNResearch from './pages/GNNResearch';
+import DataWarehousing from './pages/DataWarehousing';
+import DWFirstPrinciples from './pages/DWFirstPrinciples';
 import HomeLab from './pages/HomeLab';
 import './App.css';
 
@@ -22,6 +24,8 @@ function App() {
             <Route path="/entrepreneurship" element={<Entrepreneurship />} />
             <Route path="/research" element={<Research />} />
             <Route path="/research/gnn" element={<GNNResearch />} />
+            <Route path="/research/data-warehousing" element={<DataWarehousing />} />
+            <Route path="/research/data-warehousing/first-principles" element={<DWFirstPrinciples />} />
             <Route path="/homelab" element={<HomeLab />} />
           </Routes>
         </main>
