@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './GNNResearch.css';
 
 const GNNResearch = () => {
@@ -174,6 +175,58 @@ const GNNResearch = () => {
                             <span className="num">4</span>
                             <p>Structural multi-hop reasoning without relying solely on attention.</p>
                         </div>
+                    </div>
+                </section>
+
+                {/* 8. Research Articles */}
+                <section className="research-section">
+                    <h2>Research Articles</h2>
+                    <div className="blog-posts-list">
+                        <Link to="/research/gnn/definition-of-terms" className="blog-post-card">
+                            <div className="blog-post-content">
+                                <h3>GRAPH NEURAL NETWORKS - DEFINITION OF TERMS</h3>
+                                <span className="post-date">February 2026</span>
+                                <p>A definitional overview of the concepts of Graphs with respect to Graph Neural Networks, establishing a baseline for discrete mathematical principles.</p>
+                                <div className="tags">
+                                    <span>#GraphNeuralNetworks</span>
+                                    <span>#DeepLearning</span>
+                                    <span>#Research</span>
+                                </div>
+                            </div>
+                            <div className="read-link">
+                                Read <i className="lni lni-arrow-right"></i>
+                            </div>
+                        </Link>
+                        <Link to="/research/gnn/extractive-capabilities" className="blog-post-card">
+                            <div className="blog-post-content">
+                                <h3>EXPLORING THE EXTRACTIVE CAPABILITIES OF GRAPH NEURAL NETWORKS</h3>
+                                <span className="post-date">February 2026</span>
+                                <p>Exploring the ability to present data presented in text or tabular format as graphs and to perform several reasoning based tasks by extracting the appropriate information from the penultimate graph representation.</p>
+                                <div className="tags">
+                                    <span>#GraphNeuralNetworks</span>
+                                    <span>#EvidenceExtraction</span>
+                                    <span>#Research</span>
+                                </div>
+                            </div>
+                            <div className="read-link">
+                                Read <i className="lni lni-arrow-right"></i>
+                            </div>
+                        </Link>
+                        <Link to="/research/gnn/gnnformer-architecture" className="blog-post-card">
+                            <div className="blog-post-content">
+                                <h3>GNNFORMER ARCHITECTURE FOR GRAPH TASK COMPLETION</h3>
+                                <span className="post-date">March 2026</span>
+                                <p>Defining the GNNFormer architecture, its layer-by-layer implementation, superiority over Graph Transformers, and its optimized message passing format using PT blocks and SwishGLU.</p>
+                                <div className="tags">
+                                    <span>#GraphNeuralNetworks</span>
+                                    <span>#GNNFormer</span>
+                                    <span>#Research</span>
+                                </div>
+                            </div>
+                            <div className="read-link">
+                                Read <i className="lni lni-arrow-right"></i>
+                            </div>
+                        </Link>
                     </div>
                 </section>
             </div>

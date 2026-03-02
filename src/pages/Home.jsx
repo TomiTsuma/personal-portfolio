@@ -24,7 +24,7 @@ const Home = () => {
                         <a href="mailto:tommytsuma7@gmail.com" className="btn btn-primary">
                             Get In Touch <i className="lni lni-arrow-right"></i>
                         </a>
-                        <a href="/resume.pdf" target="_blank" className="btn btn-outline">
+                        <a href="./Thomas%20Amogolla%20Tsuma_RESUME.pdf" target="_blank" className="btn btn-outline" download="Thomas_Amogolla_Tsuma_RESUME.pdf">
                             Download CV <i className="lni lni-download"></i>
                         </a>
                     </div>
@@ -40,7 +40,7 @@ const Home = () => {
                 <div className="hero-image animate-fade-in">
                     <div className="image-wrapper">
                         {/* Placeholder for user image - user should replace this */}
-                        <img src="https://ui-avatars.com/api/?name=Thomas+Tsuma&background=1a1a1a&color=fff&size=500" alt="Thomas Tsuma" />
+                        <img src="./profile.jpeg" alt="Thomas Tsuma" />
                         <div className="decorative-shape"></div>
                         <div className="scroll-down">
                             <div className="circle-text">

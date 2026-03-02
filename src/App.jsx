@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
@@ -9,12 +9,15 @@ import Research from './pages/Research';
 import GNNResearch from './pages/GNNResearch';
 import DataWarehousing from './pages/DataWarehousing';
 import DWFirstPrinciples from './pages/DWFirstPrinciples';
+import GNNExtractive from './pages/GNNExtractive';
+import GNNDefinitions from './pages/GNNDefinitions';
+import GNNFormer from './pages/GNNFormer';
 import HomeLab from './pages/HomeLab';
 import './App.css';
 
 function App() {
   return (
-    <Router basename={import.meta.env.BASE_URL}>
+    <Router>
       <div className="app-wrapper">
         <Navbar />
         <main className="main-content">
@@ -24,6 +27,9 @@ function App() {
             <Route path="/entrepreneurship" element={<Entrepreneurship />} />
             <Route path="/research" element={<Research />} />
             <Route path="/research/gnn" element={<GNNResearch />} />
+            <Route path="/research/gnn/extractive-capabilities" element={<GNNExtractive />} />
+            <Route path="/research/gnn/definition-of-terms" element={<GNNDefinitions />} />
+            <Route path="/research/gnn/gnnformer-architecture" element={<GNNFormer />} />
             <Route path="/research/data-warehousing" element={<DataWarehousing />} />
             <Route path="/research/data-warehousing/first-principles" element={<DWFirstPrinciples />} />
             <Route path="/homelab" element={<HomeLab />} />

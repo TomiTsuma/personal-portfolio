@@ -1,0 +1,153 @@
+/* Academic Aesthetic for GNN Definitions (Light Theme) */
+
+.research-content {
+    color: #2d3748;
+    /* Darker gray for readability */
+    line-height: 1.8;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 1.05rem;
+}
+
+.concepts-list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin: 2.5rem 0;
+}
+
+.concepts-list li {
+    background: #f7fafc;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border-left: 4px solid #4a5568;
+    transition: all 0.2s ease;
+    font-size: 0.95rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.concepts-list li:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background: #edf2f7;
+}
+
+.definition-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 3rem;
+    margin: 3rem 0;
+}
+
+.definition-card {
+    background: #ffffff;
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+}
+
+.definition-card h3 {
+    color: #2c5282;
+    /* Professional blue */
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+    border-bottom: 2px solid #ebf8ff;
+    padding-bottom: 0.5rem;
+    display: inline-block;
+}
+
+.concept-block {
+    margin: 3rem 0;
+    padding: 2rem;
+    background: #edf2f7;
+    border-radius: 12px;
+    border-right: 4px solid #3182ce;
+}
+
+.concept-block h3 {
+    margin-top: 0;
+    margin-bottom: 1.25rem;
+    font-size: 1.3rem;
+    color: #2a4365;
+}
+
+.matrix-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    list-style: none;
+    padding: 0;
+    margin: 1.5rem 0;
+}
+
+.matrix-list li {
+    background: #ffffff;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #4a5568;
+    border: 1px solid #e2e8f0;
+}
+
+/* Mathematical Formula Styling */
+.formula-block {
+    display: block;
+    text-align: center;
+    margin: 2rem auto;
+    padding: 1.5rem;
+    background: #f8fafc;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    font-family: 'Cambria Math', 'Times New Roman', serif;
+    font-size: 1.4rem;
+    color: #1a202c;
+    max-width: fit-content;
+}
+
+.formula-inline {
+    font-family: 'Cambria Math', 'Times New Roman', serif;
+    font-style: italic;
+    font-weight: 600;
+    color: #2c5282;
+    padding: 0 0.3rem;
+}
+
+/* Diagram Styling */
+.diagram-container {
+    margin: 1.5rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #fdfdfd;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px dashed #cbd5e0;
+}
+
+.diagram-svg {
+    max-width: 100%;
+    height: auto;
+}
+
+.summary-card {
+    background: #2a4365 !important;
+    color: white !important;
+    border-radius: 12px;
+    padding: 2.5rem !important;
+    margin-top: 4rem;
+}
+
+.summary-card p {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+@media (max-width: 768px) {
+    .definition-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+}

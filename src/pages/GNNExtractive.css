@@ -1,0 +1,120 @@
+.json-block {
+    background: #fdfdfd;
+    border-radius: 12px;
+    padding: 0;
+    margin: 1.5rem 0;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.json-block pre {
+    font-family: 'Fira Code', 'Courier New', monospace;
+    font-size: 0.9rem;
+    padding: 2.5rem;
+    color: #1a1a1a;
+    margin: 0;
+    overflow-x: auto;
+}
+
+.table-representation-container {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 0;
+    margin: 2.5rem 0;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.source-header {
+    background: #e9ecef;
+    padding: 0.8rem 1.5rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #495057;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.source-header i {
+    font-size: 1rem;
+    color: #007bff;
+}
+
+.tabular-text {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    white-space: pre-wrap;
+    line-height: 1.8;
+    color: #1a1a1a;
+    padding: 2.5rem;
+    background: #fdfdfd;
+}
+
+.tabular-text br {
+    margin-bottom: 0.8rem;
+    display: block;
+    content: "";
+}
+
+.research-table-wrapper {
+    overflow-x: auto;
+    margin-top: 1.5rem;
+}
+
+.research-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+
+.research-table th,
+.research-table td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.research-table th {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--accent-color, #00d2ff);
+    font-weight: 600;
+}
+
+.research-table tr:nth-child(even) {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.research-table tr:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.intro-text {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #cfd8dc;
+    margin-bottom: 2rem;
+}
+
+.summary-card {
+    background: linear-gradient(135deg, rgba(0, 210, 255, 0.1) 0%, rgba(58, 123, 213, 0.1) 100%);
+    border: 1px solid rgba(0, 210, 255, 0.2);
+    border-radius: 12px;
+    padding: 2rem;
+    margin-top: 3rem;
+}
+
+.summary-card h2 {
+    margin-top: 0;
+    color: #00d2ff;
+}
+
+@media (max-width: 768px) {
+    .table-representation-container {
+        padding: 1rem;
+    }
+}
