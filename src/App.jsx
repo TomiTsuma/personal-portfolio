@@ -13,6 +13,9 @@ import GNNExtractive from './pages/GNNExtractive';
 import GNNDefinitions from './pages/GNNDefinitions';
 import GNNFormer from './pages/GNNFormer';
 import HomeLab from './pages/HomeLab';
+import EnergyCrisis from './pages/EnergyCrisis';
+import ColumnarDistillation from './pages/ColumnarDistillation';
+import PlasmaStabilization from './pages/PlasmaStabilization';
 import './App.css';
 
 function App() {
@@ -33,6 +36,9 @@ function App() {
             <Route path="/research/data-warehousing" element={<DataWarehousing />} />
             <Route path="/research/data-warehousing/first-principles" element={<DWFirstPrinciples />} />
             <Route path="/homelab" element={<HomeLab />} />
+            <Route path="/research/energy-crisis" element={<EnergyCrisis />} />
+            <Route path="/research/energy-crisis/columnar-distillation" element={<ColumnarDistillation />} />
+            <Route path="/research/energy-crisis/plasma-stabilization" element={<PlasmaStabilization />} />
           </Routes>
         </main>
         <Footer />

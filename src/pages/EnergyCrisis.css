@@ -1,0 +1,120 @@
+.research-header {
+    margin-bottom: 3rem;
+    text-align: center;
+}
+
+.research-subtitle {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    max-width: 800px;
+    margin: 1rem auto 0;
+    line-height: 1.6;
+}
+
+.research-content {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.research-section {
+    margin-bottom: 3rem;
+}
+
+.research-section h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    color: var(--text-primary);
+}
+
+.blog-posts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.blog-post-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    color: inherit;
+}
+
+.blog-post-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    border-color: var(--accent-color);
+}
+
+.blog-post-content {
+    flex: 1;
+}
+
+.blog-post-content h3 {
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+.post-date {
+    display: inline-block;
+    font-size: 0.9rem;
+    color: var(--accent-color);
+    margin-bottom: 0.75rem;
+    font-weight: 500;
+}
+
+.blog-post-content p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.tags span {
+    background: var(--accent-bg);
+    color: var(--accent-color);
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.read-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--accent-color);
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.read-link i {
+    transition: transform 0.3s ease;
+}
+
+.blog-post-card:hover .read-link i {
+    transform: translateX(4px);
+}
+
+@media (max-width: 768px) {
+    .blog-post-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .read-link {
+        align-self: flex-end;
+    }
+}

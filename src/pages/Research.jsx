@@ -47,6 +47,11 @@ const Research = () => {
             area: "Data Warehousing",
             details: "Building production-grade data warehousing systems from first principles.",
             link: "/research/data-warehousing"
+        },
+        {
+            area: "Solving the Energy Crisis",
+            details: "Implementing Physics and Neural Networks in enhancing Geothermal, Nuclear, and Hydroelectric power.",
+            link: "/research/energy-crisis"
         }
     ];
 

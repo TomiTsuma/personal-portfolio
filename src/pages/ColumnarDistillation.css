@@ -1,0 +1,534 @@
+/* ============================================
+   COLUMNAR DISTILLATION PAGE STYLES
+   ============================================ */
+
+.cd-post-meta {
+    margin-top: 1rem;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.cd-github-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+    padding: 0.6rem 1.2rem;
+    background: var(--dark);
+    color: white;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: opacity 0.2s;
+}
+
+.cd-github-link:hover {
+    opacity: 0.8;
+}
+
+/* ============================================
+   LAYOUT
+   ============================================ */
+
+.cd-content {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.cd-section {
+    margin-bottom: 4rem;
+}
+
+.cd-section h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    color: var(--dark);
+    border-left: 4px solid var(--primary);
+    padding-left: 1rem;
+}
+
+.cd-section h3 {
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+    color: var(--text-main);
+}
+
+.cd-subsection {
+    margin-bottom: 2.5rem;
+    padding-left: 1rem;
+}
+
+.cd-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.cd-detail-grid {
+    display: grid;
+    gap: 1.2rem;
+    margin: 1.2rem 0;
+}
+
+/* ============================================
+   COMPONENT CARDS (HX / TX)
+   ============================================ */
+
+.cd-component-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.cd-component-card {
+    padding: 1.5rem;
+    border-radius: 10px;
+    border: 1px solid #e0e0e0;
+}
+
+.cd-component-card h4 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+}
+
+.cd-component-card.hx {
+    background: #fff8f0;
+    border-color: #f6ad55;
+}
+
+.cd-component-card.hx h4 {
+    color: #c05621;
+}
+
+.cd-component-card.tx {
+    background: #ebf8ff;
+    border-color: #63b3ed;
+}
+
+.cd-component-card.tx h4 {
+    color: #2b6cb0;
+}
+
+/* ============================================
+   COLUMN DIAGRAM
+   ============================================ */
+
+.cd-column-diagram {
+    background: #f8f9fa;
+    border: 1px dashed #ccc;
+    border-radius: 12px;
+    padding: 2rem;
+    margin: 1.5rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.cd-col-end {
+    width: 100%;
+    max-width: 560px;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.cd-col-end.condenser {
+    background: #ebf8ff;
+    border: 1px solid #bee3f8;
+}
+
+.cd-col-end.reboiler {
+    background: #fff5f0;
+    border: 1px solid #fbd38d;
+}
+
+.cd-tray-label {
+    font-weight: 600;
+    font-size: 0.95rem;
+    white-space: nowrap;
+}
+
+.cd-product-label {
+    font-size: 0.82rem;
+    font-style: italic;
+    text-align: right;
+}
+
+.tx-label { color: #2b6cb0; }
+.hx-label { color: #c05621; }
+
+.cd-col-body {
+    width: 100%;
+    max-width: 560px;
+    border-left: 3px solid #ccc;
+    border-right: 3px solid #ccc;
+    padding: 0.5rem 1.5rem;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.cd-section-band {
+    padding: 0.6rem 0;
+    border-bottom: 1px dotted #e0e0e0;
+}
+
+.cd-band-label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #888;
+}
+
+.cd-feed-row {
+    background: #f0fff4;
+    border: 1px dashed #68d391;
+    border-radius: 6px;
+    padding: 0.6rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin: 0.3rem 0;
+}
+
+.cd-feed-arrow {
+    font-size: 0.85rem;
+    color: #276749;
+    font-weight: 400;
+}
+
+/* ============================================
+   MESH GRID
+   ============================================ */
+
+.cd-mesh-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.cd-mesh-card {
+    background: white;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    padding: 1.2rem;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.cd-mesh-letter {
+    display: block;
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: var(--primary);
+    opacity: 0.6;
+    line-height: 1;
+    margin-bottom: 0.4rem;
+}
+
+.cd-mesh-card p {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+/* ============================================
+   MATH & CODE
+   ============================================ */
+
+.cd-math-block {
+    background: #1e1e1e;
+    color: #e0e0e0;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin: 1.5rem 0;
+    font-family: 'Courier New', Courier, monospace;
+    overflow-x: auto;
+}
+
+.cd-math-code {
+    display: block;
+    background: rgba(255, 255, 255, 0.07);
+    padding: 1rem;
+    border-radius: 4px;
+    white-space: pre;
+    line-height: 1.7;
+    font-size: 0.9rem;
+}
+
+.cd-code-block {
+    background: #1e1e1e;
+    color: #d4d4d4;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin: 1.5rem 0;
+    overflow-x: auto;
+}
+
+.cd-code-block pre {
+    margin: 0;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.82rem;
+    line-height: 1.6;
+    white-space: pre;
+}
+
+.cd-math-inline {
+    display: block;
+    background: #f5f5f5;
+    padding: 0.6rem 1rem;
+    border-radius: 6px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.88rem;
+    margin: 0.5rem 0;
+}
+
+.cd-formula-inline {
+    font-family: 'Courier New', Courier, monospace;
+    background: #f5f5f5;
+    padding: 0.1rem 0.35rem;
+    border-radius: 3px;
+    font-size: 0.88em;
+}
+
+.cd-detail-block {
+    background: #fcfcfc;
+    padding: 1.2rem 1.5rem;
+    border-left: 3px solid #ddd;
+    border-radius: 0 6px 6px 0;
+}
+
+.cd-detail-block h4 {
+    margin-bottom: 0.4rem;
+    color: var(--dark);
+    font-size: 1rem;
+}
+
+.cd-tech-list {
+    list-style: none;
+    margin: 1rem 0;
+    padding: 0;
+}
+
+.cd-tech-list li {
+    margin-bottom: 0.5rem;
+    padding-left: 1.5rem;
+    position: relative;
+    line-height: 1.5;
+}
+
+.cd-tech-list li::before {
+    content: '▹';
+    position: absolute;
+    left: 0;
+    color: var(--primary);
+}
+
+/* ============================================
+   NEURAL NETWORK DIAGRAM
+   ============================================ */
+
+.cd-nn-diagram {
+    background: #f8f9fa;
+    border: 1px dashed #ccc;
+    border-radius: 12px;
+    padding: 2rem;
+    margin: 2rem 0;
+    overflow-x: auto;
+}
+
+.cd-nn-flow {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-width: 620px;
+    justify-content: center;
+}
+
+.cd-nn-box {
+    border-radius: 8px;
+    padding: 0.8rem 1rem;
+    text-align: center;
+    min-width: 80px;
+    border: 2px solid;
+}
+
+.cd-nn-box-title {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.4rem;
+    opacity: 0.7;
+}
+
+.cd-nn-box-body {
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+.cd-nn-box-sub {
+    font-size: 0.68rem;
+    margin-top: 0.4rem;
+    opacity: 0.7;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.input-box {
+    background: #ebf8ff;
+    border-color: #4299e1;
+    color: #2b6cb0;
+}
+
+.hidden-box {
+    background: #f0fff4;
+    border-color: #48bb78;
+    color: #276749;
+}
+
+.output-box {
+    background: white;
+    border-color: #9f7aea;
+}
+
+.cd-out-sig {
+    display: block;
+    color: #553c9a;
+    font-size: 0.85rem;
+}
+
+.cd-out-lin {
+    display: block;
+    color: #c05621;
+    font-size: 0.85rem;
+}
+
+.cd-nn-arrow {
+    color: #aaa;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+}
+
+.cd-skip-note {
+    margin-top: 1.2rem;
+    text-align: center;
+}
+
+.cd-skip-line {
+    font-size: 0.8rem;
+    color: #e6a817;
+    font-style: italic;
+    border-top: 1px dashed #e6a817;
+    padding-top: 0.6rem;
+    display: inline-block;
+}
+
+.cd-nn-legend {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    margin-top: 1rem;
+    font-size: 0.8rem;
+    color: #666;
+}
+
+.cd-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.cd-legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid;
+    display: inline-block;
+}
+
+.sig-dot {
+    background: #faf5ff;
+    border-color: #9f7aea;
+}
+
+.lin-dot {
+    background: #fffaf0;
+    border-color: #f6ad55;
+}
+
+/* ============================================
+   SUMMARY / HIGHLIGHT SECTION
+   ============================================ */
+
+.cd-highlight-section {
+    background: #f0fff9;
+    padding: 3rem;
+    border-radius: 16px;
+    border: 1px solid #c6f6d5;
+}
+
+.cd-highlight-section h2 {
+    border-left-color: var(--primary);
+}
+
+.cd-contributions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.cd-contribution-item {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+}
+
+.cd-num {
+    font-size: 2rem;
+    font-weight: 900;
+    color: rgba(0, 214, 144, 0.35);
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+    .cd-split {
+        grid-template-columns: 1fr;
+    }
+
+    .cd-component-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .cd-mesh-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .cd-nn-diagram {
+        overflow-x: scroll;
+    }
+
+    .cd-col-end {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .cd-product-label {
+        text-align: left;
+    }
+}

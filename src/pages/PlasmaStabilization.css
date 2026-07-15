@@ -1,0 +1,196 @@
+.cd-header-links {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+/* ============================================
+   STACK DIAGRAM (full model, vertical flow)
+   ============================================ */
+
+.ps-stack-diagram {
+    background: #f8f9fa;
+    border: 1px dashed #ccc;
+    border-radius: 12px;
+    padding: 2rem;
+    margin: 2rem 0;
+}
+
+.ps-stack-title {
+    text-align: center;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 1.5rem;
+}
+
+.ps-stack-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    margin: 0 auto;
+    max-width: 620px;
+}
+
+.ps-stack-box {
+    flex: 1;
+    border-radius: 8px;
+    padding: 0.9rem 1.2rem;
+    border: 2px solid;
+}
+
+.ps-stack-box-title {
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-bottom: 0.2rem;
+}
+
+.ps-stack-box-sub {
+    font-size: 0.78rem;
+    opacity: 0.75;
+    line-height: 1.4;
+}
+
+.ps-stack-shape {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    background: white;
+    border-radius: 6px;
+    padding: 0.4rem 0.8rem;
+    white-space: nowrap;
+}
+
+.ps-stack-io {
+    background: #ebf8ff;
+    border-color: #4299e1;
+    color: #2b6cb0;
+}
+
+.ps-stack-tcn {
+    background: #faf5ff;
+    border-color: #9f7aea;
+    color: #553c9a;
+}
+
+.ps-stack-attn {
+    background: #f0fff4;
+    border-color: #48bb78;
+    color: #276749;
+}
+
+.ps-stack-out {
+    background: #f0fff9;
+    border-color: #38b2ac;
+    color: #285e61;
+}
+
+.ps-stack-arrow {
+    text-align: center;
+    color: #aaa;
+    font-size: 1.2rem;
+    margin: 0.3rem 0;
+}
+
+.ps-stack-note {
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-top: 1.2rem;
+    font-style: italic;
+}
+
+/* ============================================
+   PARAMETER TABLES
+   ============================================ */
+
+.ps-table-wrap {
+    overflow-x: auto;
+    margin: 1.5rem 0;
+}
+
+.ps-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+
+.ps-table th,
+.ps-table td {
+    text-align: left;
+    padding: 0.6rem 0.9rem;
+    border-bottom: 1px solid #eee;
+}
+
+.ps-table th {
+    color: var(--text-muted);
+    text-transform: uppercase;
+    font-size: 0.72rem;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid #ddd;
+}
+
+.ps-table td:not(:first-child),
+.ps-table th:not(:first-child) {
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.ps-table tfoot td {
+    font-weight: 700;
+    border-bottom: none;
+    border-top: 2px solid #ddd;
+}
+
+/* ============================================
+   VIEWS SPLIT (privileged vs observed)
+   ============================================ */
+
+.ps-views-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.ps-view-card {
+    padding: 1.5rem;
+    border-radius: 10px;
+    border: 1px solid #e0e0e0;
+}
+
+.ps-view-card.privileged {
+    background: #fff8f0;
+    border-color: #f6ad55;
+}
+
+.ps-view-card.observed {
+    background: #ebf8ff;
+    border-color: #63b3ed;
+}
+
+.ps-view-card h4 {
+    font-size: 1.1rem;
+    margin-bottom: 0.6rem;
+}
+
+.ps-view-card.privileged h4 { color: #c05621; }
+.ps-view-card.observed h4 { color: #2b6cb0; }
+
+@media (max-width: 768px) {
+    .ps-stack-row {
+        flex-direction: column;
+        gap: 0.6rem;
+    }
+
+    .ps-stack-shape {
+        align-self: center;
+    }
+
+    .ps-views-grid {
+        grid-template-columns: 1fr;
+    }
+}

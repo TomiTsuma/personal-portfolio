@@ -1,0 +1,936 @@
+import React from 'react';
+import './ColumnarDistillation.css';
+import './PlasmaStabilization.css';
+
+const PlasmaStabilization = () => {
+    return (
+        <div className="page-container container animate-fade-in">
+            <div className="research-header">
+                <h1 className="page-title">Stabilizing Plasma in Tokamaks</h1>
+                <p className="research-subtitle">
+                    Implementing the imitation-learning controller from "Provable Imitation Learning for Control
+                    of Instability in Partially-Observed Vlasov–Poisson Equations" — training a causal TCN and
+                    Transformer to stabilize a kinetic plasma instability from just four sparse density sensors.
+                </p>
+                <div className="cd-post-meta">
+                    <span>July 2026</span> &nbsp;·&nbsp; <span>Plasma Physics</span> &nbsp;·&nbsp; <span>Nuclear Fusion</span> &nbsp;·&nbsp; <span>Imitation Learning</span>
+                </div>
+                <div className="cd-header-links">
+                    <a
+                        href="https://github.com/TomiTsuma/imitation-learning-plasma-stabilization"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="cd-github-link"
+                    >
+                        <i className="lni lni-github"></i> View on GitHub
+                    </a>
+                    <a
+                        href="https://arxiv.org/abs/2605.05081"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="cd-github-link"
+                    >
+                        <i className="lni lni-link"></i> Read the Paper (arXiv)
+                    </a>
+                </div>
+            </div>
+
+            <div className="cd-content">
+
+                {/* What is Plasma */}
+                <section className="cd-section">
+                    <h2>What Is Plasma?</h2>
+                    <p>
+                        This is my attempt to implement the neural network architecture proposed in the paper{' '}
+                        <em>Provable Imitation Learning for Control of Instability in Partially-Observed
+                        Vlasov–Poisson Equations</em> (arXiv:2605.05081v1).
+                    </p>
+                    <p>
+                        The aim of this study is to find ways to keep plasma stable — i.e. hold it near a
+                        spatially uniform equilibrium — by applying an external electric field. To fully
+                        understand the point of this work, I first need to explain what plasma actually is.
+                    </p>
+                    <p>
+                        Plasma is the fourth state of matter. The progression that occurs during heating — from
+                        solid, to liquid, to gas — extends further than that. Further heating strips electrons
+                        from their nuclei entirely. What's left is free negative electrons and positive ions
+                        moving independently of one another.
+                    </p>
+                    <p>
+                        Ionization is what makes a gas electrically conductive and responsive to electromagnetic
+                        fields. A neutral gas doesn't care about a magnetic field, but plasma does.
+                    </p>
+                    <p>
+                        As a result of that conductivity, plasma has a tendency to behave strangely. In ordinary
+                        gases, particles only interact when they physically collide. In plasma, every charged
+                        particle feels the electric field of every other charged particle at a distance —
+                        interactions are long-range and collective. This is what makes plasma physics
+                        complicated: particles create an electric field, and that field steers the particles, in
+                        a closed feedback loop. Tiny perturbations can grow spontaneously into full-blown
+                        instabilities.
+                    </p>
+                    <p>
+                        It's no secret that the main interest behind plasma is generating energy. During fusion,
+                        hydrogen plasma is heated to roughly 100 million degrees and held together long enough
+                        for nuclei to fuse and release enormous energy — without the radioactive waste of
+                        fission. Since no material container can touch matter that hot, the plasma is confined
+                        magnetically in a doughnut-shaped device known as a <strong>tokamak</strong>.
+                    </p>
+                </section>
+
+                {/* Our Aim */}
+                <section className="cd-section">
+                    <h2>Our Aim</h2>
+                    <p>
+                        As stated above, our aim is to identify the perturbations caused by the electromagnetic
+                        field in a plasma and stabilize them.
+                    </p>
+                    <p>
+                        If we could see the entire phase-space distribution f(x, v), stabilizing would be almost
+                        trivial: all we'd need to do is cancel the plasma's own internal electric field,
+                        H = −E, which collapses the dynamics to pure free streaming. Free streaming then
+                        stabilizes on its own via Landau damping / phase mixing. This "cancel-the-field"
+                        controller is what I'll later refer to as the <strong>expert</strong>.
+                    </p>
+                    <p>
+                        In a real device, however, we can't actually see f(x, v). We see a handful of noisy
+                        density readings at a few sensor locations, and density alone doesn't reveal the
+                        velocity-space structure that actually governs stability (the Penrose condition). So the
+                        expert is not implementable.
+                    </p>
+                    <p>
+                        To get around that, the authors propose imitation learning: train a neural network to
+                        map a short history of sparse density readings to the expert's control action, then
+                        deploy it in a closed loop. They prove that the learned controller inherits exponential
+                        stabilization up to an error floor. That floor is characterized by how rich the
+                        observations are and how "complex" the initial distribution is — via a new entropy
+                        notion — and it's validated on a 1D1V two-stream instability with only 4 sensors.
+                    </p>
+                </section>
+
+                {/* The Physics and Control Problem */}
+                <section className="cd-section">
+                    <h2>The Physics and Control Problem</h2>
+                    <p>
+                        The system is the 1D-space, 1D-velocity Vlasov–Poisson equation on a periodic domain:
+                    </p>
+                    <div className="cd-math-block">
+                        <code className="cd-math-code">{`Transport:  ∂f/∂t + v·∂f/∂x − (Hₜ(x) + Eₜ(x))·∂f/∂v = 0
+Poisson:    ∂²v/∂x² = 1 − ρₜ(x),   ρₜ(x) = ∫ f dv,   Eₜ = ∂v/∂x`}</code>
+                    </div>
+                    <ul className="cd-tech-list">
+                        <li><strong>Hₜ(x)</strong> — the external control field</li>
+                        <li><strong>Eₜ</strong> — the plasma's self-consistent internal field</li>
+                        <li><strong>v</strong> (in the Poisson line) — the electrostatic potential, not to be confused with the velocity coordinate v used everywhere else</li>
+                    </ul>
+                    <p>
+                        Any spatially uniform f = μ(v) is a stationary solution, but generically an unstable
+                        one, since perturbations tend to grow. The control objective is to choose Hₜ from the
+                        observations so the system stays near that equilibrium — equivalently, so the electric
+                        energy stays small — for as long as possible.
+                    </p>
+
+                    <div className="cd-subsection">
+                        <h3>Why Reduce to 1D1V?</h3>
+                        <p>
+                            The 1D1V reduction isn't just for convenience. Under a strong enough uniform magnetic
+                            field (B ~ 1/ε), fast perpendicular gyration averages out, and under slab symmetry
+                            the full 3D3V system reduces at leading order to exactly this 1D1V model along the
+                            field line. So the reduced model still carries the velocity-space structure that
+                            drives kinetic instabilities.
+                        </p>
+                    </div>
+
+                    <div className="cd-subsection">
+                        <h3>The Obstacle: Partial Observability</h3>
+                        <p>
+                            Stability of a kinetic plasma depends sensitively on fine velocity-space features,
+                            formalized by the Penrose condition. But two very different distributions can
+                            produce nearly identical macroscopic density profiles. Real feedback systems (e.g.
+                            DIII-D) only see sparse macroscopic diagnostics, so the information we can condition
+                            on is provably lossy with respect to the thing we're trying to control.
+                        </p>
+                        <p>
+                            That's the whole tension here, and why a single-shot reconstruction can't work — we
+                            need to exploit history instead.
+                        </p>
+                    </div>
+
+                    <div className="cd-subsection">
+                        <h3>The Expert, and Why It Works</h3>
+                        <p>
+                            Full-state control is exact field cancellation: H* = −Eₜ. Plug that in and the
+                            transport equation collapses to pure free-streaming:
+                        </p>
+                        <div className="cd-math-block">
+                            <code className="cd-math-code">∂f/∂t + v·∂f/∂x = 0</code>
+                        </div>
+                        <p>
+                            Under regularity / velocity-decay assumptions on the initial condition (smooth,
+                            factorially-bounded derivatives, polynomial velocity decay — a Gaussian-mixture
+                            density satisfies this), the free-streaming electric energy decays exponentially:
+                        </p>
+                        <div className="cd-math-block">
+                            <code className="cd-math-code">‖E‖²_L² ≤ c₁·e^(−c₂t)</code>
+                        </div>
+                        <p>
+                            This is the Landau-damping / phase-mixing mechanism (Mouhot–Villani).
+                        </p>
+                        <p>
+                            Since a real, partially-observed controller needs some history before it can act,
+                            the actual expert policy is: run uncontrolled for a short burn-in [0, t₀], then
+                            switch to H = −Eₜ. Proposition 1 shows this still gives exponential energy decay —
+                            the phase-mixing effect is robust to that initial transient. This expert is exactly
+                            baseline B2 in the paper's experiments.
+                        </p>
+                    </div>
+
+                    <div className="cd-subsection">
+                        <h3>The Imitation-Learning Algorithm</h3>
+                        <p>
+                            Now distill that unimplementable expert into something that only sees sparse density
+                            history:
+                        </p>
+                        <ul className="cd-tech-list">
+                            <li>Sample independent, identically distributed initial conditions from v₀; simulate each under the expert policy to get trajectories.</li>
+                            <li>Along each trajectory, collect the noisy density at N sensors at cadence η, forming an observation window D[t−t₀, t] — an N × (t₀/η + 1) matrix.</li>
+                            <li>Learn a time-homogeneous policy π that maps that window to the expert action −Eₜ, by empirical risk minimization (least-squares on the L² control error, pooled over time steps). This is textbook behavior cloning.</li>
+                            <li>Deploy online: Hₜ = π(D[t−t₀, t]) for t ≥ t₀, with the window collected live.</li>
+                        </ul>
+                    </div>
+
+                    <div className="cd-subsection">
+                        <h3>What This Study Actually Proves</h3>
+                        <div className="cd-detail-grid">
+                            <div className="cd-detail-block">
+                                <h4>Proposition 1</h4>
+                                <p>The expert (burn-in, then field cancellation) stabilizes exponentially.</p>
+                            </div>
+                            <div className="cd-detail-block">
+                                <h4>Theorem 1</h4>
+                                <p>
+                                    The learned policy inherits exponential stabilization, up to an error floor:
+                                </p>
+                                <div className="cd-math-block" style={{ margin: '0.8rem 0 0.8rem' }}>
+                                    <code className="cd-math-code" style={{ fontSize: '0.8rem' }}>
+                                        ‖Eₜ^π‖² ≤ c₁e^(−c₂t) + c₃(t)·[ inf_π R(π) + √(log N(ε,Π)/n) + ε ]
+                                    </code>
+                                </div>
+                                <p>
+                                    That's approximation error (can the policy class match the expert from
+                                    partial observations at all?) plus a standard covering-number / √n
+                                    statistical term. The prefactor c₃(t) can grow with time — via Grönwall's
+                                    inequality plus behavior-cloning covariate shift — so this is a
+                                    finite-horizon guarantee: small approximation error buys you a long stable
+                                    window, but whether the eventual exponential blow-up is avoidable is left
+                                    open. That's why, empirically, every run eventually diverges.
+                                </p>
+                            </div>
+                            <div className="cd-detail-block">
+                                <h4>Theorem 2</h4>
+                                <p>Bounds the minimal risk inf_π R(π) by three interpretable pieces:</p>
+                                <ul className="cd-tech-list">
+                                    <li>An unavoidable discretization floor, from a finite sampling rate.</li>
+                                    <li>A bias–variance trade-off in history length k — averaging more past observations cuts variance but adds bias, because older data is stale.</li>
+                                    <li>A statistical term featuring a new ε-resolution entropy that measures the complexity of the initial distribution at scale ε. Low entropy → small cloning loss → good stabilization — and the policy class adapts automatically without knowing v₀, which is the selling point over Bayesian-inverse-problem approaches that need the prior exactly.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                {/* The Vlasov-Poisson Equations */}
+                <section className="cd-section">
+                    <h2>The Vlasov–Poisson Equations</h2>
+                    <p>
+                        A VP system describes plasma not as a swarm of individual particles, but as a density in
+                        phase-space.
+                    </p>
+                    <div className="cd-subsection">
+                        <h3>Density</h3>
+                        <p>
+                            A function f(t, x, v) tells us how many particles sit near position x with velocity
+                            near v at time t. To understand the VP model, focus on two statements: particles
+                            stream and get pushed around by an electric field (Vlasov), and the field itself is
+                            generated by the particles' own charge (Poisson).
+                        </p>
+                    </div>
+
+                    <div className="cd-subsection">
+                        <h3>The Vlasov Equation</h3>
+                        <p>Written in 1D1V convention, this is a conservation law:</p>
+                        <div className="cd-math-block">
+                            <code className="cd-math-code">∂f/∂t + v·∂f/∂x − (Hₜ + Eₜ)·∂f/∂v = 0</code>
+                        </div>
+                        <p>f is constant along the trajectory of each particle. The three terms are just the chain rule for df/dt along Newton's equations of motion:</p>
+                        <ul className="cd-tech-list">
+                            <li><strong>∂f/∂t</strong> — how f changes in time at a fixed point</li>
+                            <li><strong>v·∂f/∂x</strong> — particles carry their density with them as they move in space at velocity v. This is free streaming: fast particles drift right, slow ones lag.</li>
+                            <li><strong>(Hₜ+Eₜ)·∂f/∂v</strong> — the force reshuffles particles in velocity. The acceleration here is the total field: the plasma's self-field Eₜ plus the external control Hₜ.</li>
+                        </ul>
+                        <p>
+                            Since the right-hand side has no collision term, this is a collisionless model —
+                            particles never scatter off each other directly. They only feel each other through
+                            the shared mean field.
+                        </p>
+                        <p>
+                            Since f is conserved along trajectories while phase-space volume is preserved
+                            (Liouville's theorem), f can't pile up or compress — it can only be stirred, stretched
+                            into ever finer filaments in velocity. That filamentation is the mechanism behind
+                            Landau damping, and behind why the expert controller works.
+                        </p>
+                    </div>
+
+                    <div className="cd-subsection">
+                        <h3>The Poisson Equation</h3>
+                        <p>
+                            The field is self-generated: Eₜ is made by the particles themselves. We integrate f
+                            over velocity to get the spatial charge density, then solve:
+                        </p>
+                        <div className="cd-math-block">
+                            <code className="cd-math-code">{`ρₜ(x) = ∫ f dv
+∂²v/∂x² = 1 − ρₜ(x),   Eₜ = ∂v/∂x`}</code>
+                        </div>
+                        <p>
+                            The "1" is a fixed neutralizing background (think heavy ions); "1 − ρ" is the net
+                            charge. When the mobile particles are spread perfectly uniformly (ρ = 1) everywhere,
+                            the net charge vanishes — there's no field, and the system sits at equilibrium. Any
+                            bunching creates a field that pushes back, or, for the wrong velocity distributions,
+                            pushes outward and grows.
+                        </p>
+                    </div>
+                </section>
+
+                {/* Formalizing the System */}
+                <section className="cd-section">
+                    <h2>Formalizing the System</h2>
+
+                    <div className="cd-subsection">
+                        <h3>The Governing Equations</h3>
+                        <p>The core system being controlled — the 1D1V Vlasov–Poisson equations:</p>
+                        <div className="cd-math-block">
+                            <code className="cd-math-code">{`∂fₜ/∂t + v·∂fₜ/∂x − (Hₜ(x) + Eₜ(x))·∂fₜ/∂v = 0
+∂²v/∂x² = 1 − ∫ fₜ(x,v) dv
+Eₜ(x) = ∂v/∂x`}</code>
+                        </div>
+                        <p>
+                            The first is the Vlasov transport equation — f conserved along Newtonian
+                            trajectories, driven by the total field Hₜ + Eₜ. The second is Poisson's equation,
+                            closing the field self-consistently from the charge. The third defines the field
+                            from the potential. Any spatially homogeneous fₜ = μ(v) is a stationary solution, but
+                            generically an unstable one — which is the whole point of controlling it.
+                        </p>
+                        <p>The reduced model's parent — the full 3D3V system:</p>
+                        <div className="cd-math-block">
+                            <code className="cd-math-code">∂f/∂t + v·∇ₓf + (E + v×B)·∇ᵥf = 0</code>
+                        </div>
+                        <p>This is the equation whose phase mixing gives the stabilization.</p>
+                    </div>
+
+                    <div className="cd-subsection">
+                        <h3>The Observation Model</h3>
+                        <p>The macroscopic density — the only observable quantity, in raw form:</p>
+                        <div className="cd-math-block">
+                            <code className="cd-math-code">ρₜ(x) = ∫ fₜ(x,v) dv</code>
+                        </div>
+                        <p>Noisy, sparse sensor readings at N uniform locations xᵢ = i/N and discrete times kη:</p>
+                        <div className="cd-math-block">
+                            <code className="cd-math-code">p̃ᵢ,ₖ = ρ_kη(xᵢ) + Wᵢ,ₖ,   Wᵢ,ₖ ~ 𝒩(0, σ²) i.i.d.</code>
+                        </div>
+                        <p>
+                            The pooled observation window fed to the policy is an N × (t₂/η − t₁/η + 1) matrix.
+                            The controller always uses the trailing window D[t−t₀, t].
+                        </p>
+                    </div>
+
+                    <div className="cd-subsection">
+                        <h3>Three Control Policies</h3>
+                        <div className="cd-detail-grid">
+                            <div className="cd-detail-block">
+                                <h4>Full information (privileged)</h4>
+                                <p>Exact field cancellation: H*ₜ(x) = −Eₜ(x). The optimal, unimplementable controller.</p>
+                            </div>
+                            <div className="cd-detail-block">
+                                <h4>Expert</h4>
+                                <p>The policy the network imitates — uncontrolled burn-in, then cancellation:</p>
+                                <div className="cd-math-block" style={{ margin: '0.8rem 0 0.8rem' }}>
+                                    <code className="cd-math-code" style={{ fontSize: '0.8rem' }}>{`Hₜ^expert(x) = 0            for t ∈ [0, t₀]
+             = −Eₜ(x)      for t > t₀`}</code>
+                                </div>
+                            </div>
+                            <div className="cd-detail-block">
+                                <h4>Deployed / learned</h4>
+                                <p>The network acting on the live observation window:</p>
+                                <div className="cd-math-block" style={{ margin: '0.8rem 0 0.8rem' }}>
+                                    <code className="cd-math-code" style={{ fontSize: '0.8rem' }}>{`Hₜ^π(x) = 0                        for t < t₀
+        = π(D[t−t₀, t])(x)          for t ≥ t₀`}</code>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="cd-subsection">
+                        <h3>The Imitation-Learning Objective</h3>
+                        <p>
+                            Draw random initial conditions f₀¹, ..., f₀ⁿ ~ v₀, i.i.d., and minimize empirical
+                            risk (behavior cloning):
+                        </p>
+                        <div className="cd-math-block">
+                            <code className="cd-math-code">{`π̂ = argmin_π  (1/n)·Σⱼ ℓ̂⁽ʲ⁾(π)
+
+ℓ̂⁽ʲ⁾(π) := (η/(T−t₀))·Σ_{t₀≤kη≤T} ‖π(D⁽ʲ⁾[kη−t₀, kη]) + E⁽ʲ⁾_kη‖²`}</code>
+                        </div>
+                        <p>
+                            The target is −E, so the loss drives π(observation) toward −E — toward the expert
+                            action. The population (continuous-time) counterpart, whose infimum over the policy
+                            class is the irreducible approximation error, is:
+                        </p>
+                        <div className="cd-math-block">
+                            <code className="cd-math-code">{`ℓ(π; z) := (1/(T−t₀))·∫_{t₀}^{T} E[‖π(D_z[t−t₀,t]) + Eₜ‖²] dt
+R(π) = 𝔼_z[ℓ(π; z)],   approximation error = inf_π R(π)`}</code>
+                        </div>
+                    </div>
+
+                    <div className="cd-subsection">
+                        <h3>The Theoretical Guarantees</h3>
+                        <p>The regularity hypothesis (Assumption 1) bounds the analyticity norm of the initial condition:</p>
+                        <div className="cd-math-block">
+                            <code className="cd-math-code">{`‖f₀‖_Eq(λ₀) ≤ B₀
+‖f‖_Cq^m = sup_(|α|=m) sup_(x,v) (1+|v|)^q |∂^α f(x,v)|
+‖f‖_Eq(λ) = Σ_(m=0)^∞ (λ^m / m!)·‖f‖_Cq^m`}</code>
+                        </div>
+                        <p>The expert's stability guarantee — exponential decay of electric energy:</p>
+                        <div className="cd-math-block">
+                            <code className="cd-math-code">‖Eₜ‖² ≤ c₁e^(−c₂t)  ∀ t ≥ 0</code>
+                        </div>
+                        <p>
+                            The learned-policy guarantee (Theorem 1), where N(ε, Π, ‖·‖∞) is the ε-covering
+                            number of the policy class:
+                        </p>
+                        <div className="cd-math-block">
+                            <code className="cd-math-code">‖Eₜ^π‖² ≤ c₁e^(−c₂t) + c₃(t)·[ inf_π R(π) + √(log N(ε,Π,‖·‖∞)/n) + ε ]</code>
+                        </div>
+                        <p>where the constants c₁, c₂ &gt; 0 are the same ones as in the expert's guarantee.</p>
+                        <p>The ε-resolution entropy — a scale-sensitive complexity measure for the initial distribution:</p>
+                        <div className="cd-math-block">
+                            <code className="cd-math-code">Hε(v₀) := −∫ log v₀(B(f, ε)) dv₀(f)   ∀ ε &gt; 0</code>
+                        </div>
+                        <p>The approximation-error decomposition (Theorem 2), valid for any p ≤ q−2:</p>
+                        <div className="cd-math-block">
+                            <code className="cd-math-code">inf_π R(π) ≤ c(η² + e^(−c₀N)) + c·inf over k∈ℕ, ε&gt;0 [ (kη)^(2p) + ε² + (σ²/k)·(Hε(v₀) + log(T/ε))/N ]</code>
+                        </div>
+                        <p>
+                            where c, c₀ &gt; 0 depend on the regularity parameters in Assumption 1 and the
+                            integer p. The three groups are the unavoidable discretization floor (finite sensors
+                            N, finite cadence η), the staleness bias from using a length-k history, and the
+                            variance term carrying the entropy — a longer history k cuts variance but raises the
+                            (kη)^(2p) bias.
+                        </p>
+                    </div>
+
+                    <div className="cd-subsection">
+                        <h3>Experimental Setup</h3>
+                        <p>The paper's concrete instantiations. A two-stream Maxwellian equilibrium, with stream separation v̄ = 2.4:</p>
+                        <div className="cd-math-block">
+                            <code className="cd-math-code">μ(v; v̄) = (1/(2√(2π)))·exp(−(v−v̄)²/2) + (1/(2√(2π)))·exp(−(v+v̄)²/2)</code>
+                        </div>
+                        <p>To challenge the control policy, the initial state uses a dual-mode perturbation:</p>
+                        <div className="cd-math-block">
+                            <code className="cd-math-code">{`f₀(x,v) = μ(v; v̄)·(1 + ε·η(x)),   ε = 0.05
+η(x) = cos(k₁·2πx/Lₓ + φ₁) + cos(k₂·2πx/Lₓ + φ₂)`}</code>
+                        </div>
+                        <p>
+                            η(x) superposes a macroscopic low-frequency mode and a microscopic high-frequency
+                            mode. The phase shifts φ₁, φ₂ ~ Unif(0, 2π) are randomized for every trajectory, to
+                            test the robustness of the policy.
+                        </p>
+                        <p>The observation tensor (N = 4, K = 50):</p>
+                        <div className="cd-math-block">
+                            <code className="cd-math-code">Dⱼ = (ρ̃ᵢ,ⱼ₋ℓ) ∈ ℝ^(N×K),   1 ≤ i ≤ N,   0 ≤ ℓ ≤ K−1</code>
+                        </div>
+                        <p>The scale-aware hybrid loss (M_f = 8, so 2M_f = 16 coefficients per step, with a geometric per-mode weight w_k):</p>
+                        <div className="cd-math-block">
+                            <code className="cd-math-code">{`L = α·Lₐbₛ + β·Lᵣₑₗ
+
+Lₐbₛ = (1/K)·Σⱼ Σₖ w·|ĉₖ,ⱼ − cₖ,ⱼ|²
+Lᵣₑₗ = (1/K)·Σⱼ Σₖ wₖ·|(ĉₖ,ⱼ − cₖ,ⱼ)/cₖ,ⱼ|²`}</code>
+                        </div>
+                        <p>
+                            c_k,j are the ground-truth Fourier coefficients for mode k at step j; ĉ_k,j are the
+                            network's predictions. α and β are balancing hyperparameters, and w_k ∝ k⁻¹ is a
+                            static decay weight applied to the k-th Fourier mode.
+                        </p>
+                        <p>Baseline controllers used for comparison:</p>
+                        <ul className="cd-tech-list">
+                            <li><strong>B0:</strong> Hₜ(x) ≡ 0 — no control at all.</li>
+                            <li><strong>B1:</strong> Hₜ(x) = −E′ₜ(x), Poisson solved by zero-padding to nₓ = 1024 and taking an inverse FFT.</li>
+                            <li><strong>B2:</strong> Hₜ(x) = −Eₜ^true(x)·1[t ≥ t₀] — this is the expert.</li>
+                        </ul>
+                        <p>The evaluation metric is the macroscopic electric energy:</p>
+                        <div className="cd-math-block">
+                            <code className="cd-math-code">E(t) = (1/2)·∫₀^Lx |Eₜ(x)|² dx</code>
+                        </div>
+                    </div>
+                </section>
+
+                {/* Understanding the Data */}
+                <section className="cd-section">
+                    <h2>Understanding the Data</h2>
+                    <p>
+                        The data used for this study is completely synthetic, and is generated from the governing
+                        equations in the sections above by a Vlasov–Poisson simulator. The dataset is a
+                        collection of (what the sensors would see, what the ideal controller would do) pairs,
+                        manufactured by running the physics forward and watching the expert.
+                    </p>
+
+                    <div className="cd-subsection">
+                        <h3>Two Views of a Trajectory</h3>
+                        <p>
+                            Each simulated trajectory is recorded in two parallel "views," and the whole method
+                            lives in the gap between them.
+                        </p>
+                        <div className="ps-views-grid">
+                            <div className="ps-view-card privileged">
+                                <h4>Privileged View</h4>
+                                <p>
+                                    The full phase-space distribution fₜ(x, v) on a 1024×1024 grid, and everything
+                                    computable exactly from it — the density ρₜ, the potential vₜ, and the internal
+                                    electric field Eₜ. This is what an omniscient observer sees. It's used to run
+                                    the simulation, compute the training labels, and produce the phase-space
+                                    snapshots in the results. It is never available to the deployed controller.
+                                </p>
+                            </div>
+                            <div className="ps-view-card observed">
+                                <h4>Observed View</h4>
+                                <p>
+                                    What a real diagnostic would give you: the density sampled at just 4 fixed
+                                    sensor locations, at discrete times, corrupted by Gaussian noise. This is the
+                                    only thing the network is actually allowed to consume. The entire premise —
+                                    controlling a kinetic instability from macroscopic measurements — is the
+                                    statement that you must act using the observed view while the physics is
+                                    governed by the privileged view.
+                                </p>
+                            </div>
+                        </div>
+                        <p>
+                            The data is therefore imitation-learning data: input = a short history of the
+                            observed view; label = the expert's action, derived from the privileged view.
+                        </p>
+                    </div>
+
+                    <div className="cd-subsection">
+                        <h3>How the Data Is Prepared</h3>
+                        <p>For each trajectory, the pipeline is:</p>
+                        <ul className="cd-tech-list">
+                            <li>
+                                <strong>Draw an initial condition f₀ ~ v₀.</strong> v₀ is an extremely narrow
+                                family — the two-stream Maxwellian μ(v; v̄) with v̄ = 2.4, perturbed by
+                                f₀ = μ(v)(1 + ε·η(x)) with ε = 0.05, where η is the sum of a mode-1 and a
+                                mode-(−5) cosine. Everything is fixed except the two phase shifts φ₁, φ₂ ~ Unif(0, 2π), which are redrawn for every trajectory.
+                            </li>
+                            <li>
+                                <strong>Simulate the expert trajectory.</strong> A semi-Lagrangian solver runs on
+                                the 1024×1024 (x, v) grid at Δt = 0.02, up to T = 80. On the burn-in [0, t₀ = 1],
+                                no control is applied, so the full self-consistent Vlasov–Poisson system runs
+                                freely. For t &gt; t₀, the expert applies H = −Eₜ, which cancels the field and
+                                reduces the evolution to pure free-streaming. This is why the authors describe
+                                the training data as coming from "unforced free-streaming evolution" — after
+                                burn-in, the field isn't driving the particles at all; f just phase-mixes
+                                ballistically, ρₜ relaxes toward uniform, and Eₜ decays by Landau damping. A
+                                consequence to plan for: the labels span many orders of magnitude, huge early and
+                                tiny later.
+                            </li>
+                            <li>
+                                <strong>Record the two views at each timestep.</strong> The observed view
+                                subsamples ρₜ to the 4 sensor locations and adds noise Wᵢ ~ 𝒩(0, σ²). The label
+                                solves Poisson for the exact Eₜ and stores the target control field −Eₜ,
+                                represented as its first 2M_f = 16 truncated Fourier coefficients. The field
+                                solve after burn-in is done only to produce the label — free streaming itself
+                                doesn't need it.
+                            </li>
+                        </ul>
+                        <p>
+                            The result of one trajectory is a long time series: at each control time tⱼ (from t₀
+                            to T), one input window paired with one target coefficient vector.
+                        </p>
+                    </div>
+
+                    <div className="cd-subsection">
+                        <h3>Structure of a Single Training Example</h3>
+                        <p>The input at control step j is the observation tensor:</p>
+                        <div className="cd-math-block">
+                            <code className="cd-math-code">Dⱼ = (ρ̃ᵢ,ⱼ₋ℓ)   for 1 ≤ i ≤ N = 4,   0 ≤ ℓ ≤ K−1 = 49   →  shape 4 × 50</code>
+                        </div>
+                        <p>
+                            That's 4 sensors by the trailing 50 timesteps of noisy density. Before it enters the
+                            network, it's augmented with first-order temporal differences Δρ̃ — consecutive-step
+                            differences, giving the network an explicit velocity-of-density channel alongside
+                            the raw values, effectively doubling the input features.
+                        </p>
+                        <p>
+                            One detail worth internalizing: K = 50 and Δt = 0.02 give K·Δt = 1 = t₀ exactly. The
+                            observation cadence η equals the solver step Δt, and each window spans precisely one
+                            burn-in horizon of history — that's the amount of past the deployed policy is
+                            defined to use, D[t−t₀, t].
+                        </p>
+                        <p>
+                            The label at step j is the target control field −E_tⱼ(x), stored as 16 real Fourier
+                            coefficients c_k,j (M_f = 8 complex modes → 16 real numbers). The network predicts
+                            ĉ_k,j, and an inverse FFT turns them back into the spatial field — working in this
+                            truncated spectral space is both the label representation and the output
+                            representation.
+                        </p>
+                        <p>
+                            Stacking over all control steps and all trajectories gives the full dataset. Per
+                            trajectory there are roughly (T−t₀)/Δt ≈ 3,950 such (window, coefficients) pairs, so
+                            even a modest number of trajectories yields a large pool of examples — though the
+                            windows within one trajectory heavily overlap.
+                        </p>
+                    </div>
+                </section>
+
+                {/* The Neural Network */}
+                <section className="cd-section">
+                    <h2>The Neural Network</h2>
+                    <p>
+                        The full model — a causal TCN feeding a Transformer encoder, followed by a small MLP
+                        head — comes out to roughly 192k parameters:
+                    </p>
+
+                    <div className="ps-stack-diagram">
+                        <div className="ps-stack-title">NeuralController — full stack (~192k params)</div>
+
+                        <div className="ps-stack-row">
+                            <div className="ps-stack-box ps-stack-io">
+                                <div className="ps-stack-box-title">Inputs</div>
+                                <div className="ps-stack-box-sub">sensor density + temporal diffs, N=4 sensors, K=50 steps</div>
+                            </div>
+                            <div className="ps-stack-shape">(B,4,50) × 2</div>
+                        </div>
+                        <div className="ps-stack-arrow">↓</div>
+
+                        <div className="ps-stack-row">
+                            <div className="ps-stack-box ps-stack-io">
+                                <div className="ps-stack-box-title">Standardize (per-channel)</div>
+                                <div className="ps-stack-box-sub">z = (x − mean) / std, 8 channel stats from the training set</div>
+                            </div>
+                            <div className="ps-stack-shape">(B,8,50)</div>
+                        </div>
+                        <div className="ps-stack-arrow">↓</div>
+
+                        <div className="ps-stack-row">
+                            <div className="ps-stack-box ps-stack-tcn">
+                                <div className="ps-stack-box-title">Causal TCN</div>
+                                <div className="ps-stack-box-sub">5 residual blocks, 8→64 channels, k=3, dilations 1,2,4,8,16, dropout 0.1 (RF=125)</div>
+                            </div>
+                            <div className="ps-stack-shape">(B,64,50)</div>
+                        </div>
+                        <div className="ps-stack-arrow">↓</div>
+
+                        <div className="ps-stack-row">
+                            <div className="ps-stack-box ps-stack-tcn">
+                                <div className="ps-stack-box-title">Transpose to tokens</div>
+                                <div className="ps-stack-box-sub">swap channel / time axes, no params</div>
+                            </div>
+                            <div className="ps-stack-shape">(B,50,64)</div>
+                        </div>
+                        <div className="ps-stack-arrow">↓</div>
+
+                        <div className="ps-stack-row">
+                            <div className="ps-stack-box ps-stack-attn">
+                                <div className="ps-stack-box-title">+ Sinusoidal positional encoding</div>
+                                <div className="ps-stack-box-sub">d_model=64, added to the 50 tokens</div>
+                            </div>
+                            <div className="ps-stack-shape">(B,50,64)</div>
+                        </div>
+                        <div className="ps-stack-arrow">↓</div>
+
+                        <div className="ps-stack-row">
+                            <div className="ps-stack-box ps-stack-attn">
+                                <div className="ps-stack-box-title">Transformer encoder ×2</div>
+                                <div className="ps-stack-box-sub">d=64, heads=4, ff=128, GELU, dropout 0.1, post-norm</div>
+                            </div>
+                            <div className="ps-stack-shape">(B,50,64)</div>
+                        </div>
+                        <div className="ps-stack-arrow">↓</div>
+
+                        <div className="ps-stack-row">
+                            <div className="ps-stack-box ps-stack-attn">
+                                <div className="ps-stack-box-title">Mean-pool over time</div>
+                                <div className="ps-stack-box-sub">average over the 50 tokens, no params</div>
+                            </div>
+                            <div className="ps-stack-shape">(B,64)</div>
+                        </div>
+                        <div className="ps-stack-arrow">↓</div>
+
+                        <div className="ps-stack-row">
+                            <div className="ps-stack-box ps-stack-attn">
+                                <div className="ps-stack-box-title">MLP head</div>
+                                <div className="ps-stack-box-sub">Linear 64→128 → GELU → dropout 0.1 → Linear 128→16</div>
+                            </div>
+                            <div className="ps-stack-shape">(B,16)</div>
+                        </div>
+                        <div className="ps-stack-arrow">↓</div>
+
+                        <div className="ps-stack-row">
+                            <div className="ps-stack-box ps-stack-out">
+                                <div className="ps-stack-box-title">Inverse FFT (deploy only)</div>
+                                <div className="ps-stack-box-sub">16 reals → 8 complex modes → Hermitian iFFT</div>
+                            </div>
+                            <div className="ps-stack-shape">(B,nₓ) = H(x)</div>
+                        </div>
+
+                        <div className="ps-stack-note">
+                            Training compares the (B,16) coefficients directly to the target; the iFFT runs
+                            only at deployment to reconstruct H(x).
+                        </div>
+                    </div>
+
+                    <div className="cd-subsection">
+                        <h3>Causal Temporal Convolutional Network</h3>
+                        <p>
+                            The TCN is the part where the physics-to-tensor mapping is least obvious. It
+                            converts the 8 raw sensor channels into 64 learned temporal features, at every one
+                            of the 50 timesteps, using only past information: (B,8,50) → (B,64,50). The time
+                            axis is deliberately preserved — the TCN doesn't summarize the window, it enriches
+                            each timestep with context from its past, and only later does attention integrate
+                            globally and mean-pool collapse it.
+                        </p>
+
+                        <div className="ps-table-wrap">
+                            <table className="ps-table">
+                                <thead>
+                                    <tr>
+                                        <th>Block</th>
+                                        <th>Dilation</th>
+                                        <th>Pad / Chomp</th>
+                                        <th>Shape in → out</th>
+                                        <th>Params</th>
+                                        <th>Cumulative RF</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>1</td><td>1</td><td>2</td><td>(8,50) → (64,50)</td><td>14,656</td><td>5</td></tr>
+                                    <tr><td>2</td><td>2</td><td>4</td><td>(64,50) → (64,50)</td><td>24,832</td><td>13</td></tr>
+                                    <tr><td>3</td><td>4</td><td>8</td><td>(64,50) → (64,50)</td><td>24,832</td><td>29</td></tr>
+                                    <tr><td>4</td><td>8</td><td>16</td><td>(64,50) → (64,50)</td><td>24,832</td><td>61</td></tr>
+                                    <tr><td>5</td><td>16</td><td>32</td><td>(64,50) → (64,50)</td><td>24,832</td><td>125</td></tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr><td colSpan="4">Total</td><td>113,984</td><td>—</td></tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                        <p>
+                            In total, the TCN accounts for 113,984 parameters — about 59% of the whole model's
+                            192k. The time axis stays 50 throughout; the blocks preserve it. Channel count only
+                            changes in block 1.
+                        </p>
+                        <p>
+                            The cumulative receptive field is the whole reason for the dilation schedule. Each
+                            block has two convolutions of kernel size 3, so it adds 2·(k−1)·d to the receptive
+                            field. Doubling the dilation d makes the receptive field grow geometrically — 5, 13,
+                            29, 61, 125 — reaching 125 ≥ K = 50 within only 5 blocks. Stacking non-dilated
+                            convolutions to cover 50 steps would need roughly 25 blocks, and about five times the
+                            parameters.
+                        </p>
+
+                        <div className="cd-detail-grid">
+                            <div className="cd-detail-block">
+                                <h4>Conv1d (dilated)</h4>
+                                <p>
+                                    A 1D convolution along time, shared across all 50 positions. With k=3, d=4,
+                                    each output at timestep t is a learned mix of the input at steps t, t−4,
+                                    t−8 — the dilation skips intermediate steps so the filter spans 9 steps while
+                                    holding only 3 taps. It's a full mix across the 64 input channels, so it
+                                    learns cross-sensor relationships too, not just per-sensor patterns. Weight
+                                    normalization reparameterizes each filter as magnitude × direction, which
+                                    decouples scale from orientation and stabilizes optimization — relevant here
+                                    because the targets span orders of magnitude.
+                                </p>
+                            </div>
+                            <div className="cd-detail-block">
+                                <h4>Padding / Chomp — the causality mechanism</h4>
+                                <p>
+                                    This is the subtlest part. PyTorch's Conv1d pads symmetrically by default,
+                                    which would let step t peek at step t+1. The Bai-style fix: pad zeros on the
+                                    left only, which grows the output length from 50 to 58, then "chomp" discards
+                                    the last 8 positions, returning to 50. What survives is an output where step
+                                    t is a function of inputs ≤ t and nothing later.
+                                </p>
+                            </div>
+                            <div className="cd-detail-block">
+                                <h4>GELU</h4>
+                                <p>
+                                    A smooth non-linearity, shape unchanged. Without it, the stack collapses to a
+                                    single linear filter, unable to represent the amplitude / phase relationships
+                                    that encode the hidden velocity-space state.
+                                </p>
+                            </div>
+                            <div className="cd-detail-block">
+                                <h4>Dropout (0.1)</h4>
+                                <p>
+                                    Training-only channel noise; identity at evaluation. Regularizes against
+                                    overfitting the heavily-overlapping windows — consecutive training examples
+                                    differ by one timestep, so the effective sample size is far below the raw
+                                    example count.
+                                </p>
+                            </div>
+                            <div className="cd-detail-block">
+                                <h4>Residual connection</h4>
+                                <p>
+                                    Output = GELU(conv_path + input). Gradients reach early blocks directly, and
+                                    each block only has to learn a correction to what came before. The
+                                    down-projection is a 1×1 Conv1d in block 1, to reconcile 8 channels with 64,
+                                    and an identity in blocks 2–5.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="cd-subsection">
+                        <h3>Attention Mechanism</h3>
+                        <p>
+                            The TCN hands over (B,64,50). A transpose makes the 50 timesteps into tokens:
+                            (B,50,64) — 50 tokens, each a 64-dim feature vector describing "what was happening
+                            around this timestep." The encoder maps (B,50,64) → (B,50,64): shape unchanged,
+                            because it's a sequence-to-sequence refinement, not a summarizer. Collapsing happens
+                            later, at the mean-pool.
+                        </p>
+
+                        <div className="ps-table-wrap">
+                            <table className="ps-table">
+                                <thead>
+                                    <tr>
+                                        <th>Parameter</th>
+                                        <th>Shape</th>
+                                        <th>Count</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>self_attn.in_proj_weight</td><td>(192, 64)</td><td>12,288</td></tr>
+                                    <tr><td>self_attn.in_proj_bias</td><td>(192,)</td><td>192</td></tr>
+                                    <tr><td>self_attn.out_proj.weight</td><td>(64, 64)</td><td>4,096</td></tr>
+                                    <tr><td>self_attn.out_proj.bias</td><td>(64,)</td><td>64</td></tr>
+                                    <tr><td>linear1.weight (FF up)</td><td>(128, 64)</td><td>8,192</td></tr>
+                                    <tr><td>linear1.bias</td><td>(128,)</td><td>128</td></tr>
+                                    <tr><td>linear2.weight (FF down)</td><td>(64, 128)</td><td>8,192</td></tr>
+                                    <tr><td>linear2.bias</td><td>(64,)</td><td>64</td></tr>
+                                    <tr><td>norm1.weight / bias</td><td>(64,) × 2</td><td>128</td></tr>
+                                    <tr><td>norm2.weight / bias</td><td>(64,) × 2</td><td>128</td></tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr><td colSpan="2">One encoder layer</td><td>33,472</td></tr>
+                                    <tr><td colSpan="2">Two layers</td><td>66,944</td></tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                        <p>
+                            PyTorch stacks W_q, W_k, W_v into a single matrix (3×64 = 192 rows) for one fused
+                            matmul. Rebuilding with three separate 64→64 linear layers gives identical math and
+                            an identical parameter count — just a different state-dict layout.
+                        </p>
+
+                        <div className="cd-subsection">
+                            <h4>Layer by Layer</h4>
+                            <div className="cd-detail-grid">
+                                <div className="cd-detail-block">
+                                    <h4>0. Positional encoding (before the encoder, 0 params)</h4>
+                                    <p>
+                                        Attention is permutation-invariant — shuffle the 50 tokens and you get
+                                        the same set of outputs, reordered. It has no notion of "earlier."
+                                        Sinusoidal encodings are added to each token so that position is baked
+                                        into the features.
+                                    </p>
+                                </div>
+                                <div className="cd-detail-block">
+                                    <h4>QKV projection: x·Wqkv : (1,50,64) → (1,50,192)</h4>
+                                    <p>
+                                        Split into Q, K, V of (1,50,64) each. Each token emits three views of
+                                        itself — a query (what am I looking for?), a key (what do I offer to
+                                        others?), and a value (what content do I pass along if selected?).
+                                    </p>
+                                </div>
+                                <div className="cd-detail-block">
+                                    <h4>Reshape into heads: (1,50,64) → (1,4,50,16)</h4>
+                                    <p>
+                                        The 64 dims split into 4 heads of head_dim=16. Each head runs the whole
+                                        attention operation independently on its own 16-dim subspace, so
+                                        different heads can specialize — one might track a slow oscillation,
+                                        another a fast one, another a cross-sensor lag. The heads are then
+                                        concatenated back, so multi-head attention costs nothing extra in
+                                        parameters versus a single head; it just partitions the same budget.
+                                    </p>
+                                </div>
+                                <div className="cd-detail-block">
+                                    <h4>Attention scores: QKᵀ/√16 → (1,4,50,50)</h4>
+                                    <p>
+                                        This is the heart of attention: a 50×50 matrix per head, where entry
+                                        (i, j) is the affinity between token i's query and token j's key. The
+                                        √16 divisor keeps the dot product from growing with dimension and
+                                        pushing softmax into saturation, where gradients vanish.
+                                    </p>
+                                </div>
+                                <div className="cd-detail-block">
+                                    <h4>Softmax: A = softmax(scores)</h4>
+                                    <p>
+                                        Rows sum to 1. Each token now has a probability distribution over all 50
+                                        timesteps — a set of weights saying how much to draw from each other
+                                        timestep.
+                                    </p>
+                                </div>
+                                <div className="cd-detail-block">
+                                    <h4>Context: A·V → (1,4,50,16)</h4>
+                                    <p>
+                                        Each token's output is the attention-weighted average of all tokens'
+                                        values. This is the actual information movement — a token at step 49
+                                        can pull content directly from step 0 in a single hop.
+                                    </p>
+                                </div>
+                                <div className="cd-detail-block">
+                                    <h4>Concat + output projection</h4>
+                                    <p>
+                                        Heads recombine (1,4,50,16) → (1,50,64), then a 64×64 projection mixes
+                                        across head boundaries, so heads can interact rather than staying
+                                        isolated subspaces.
+                                    </p>
+                                </div>
+                                <div className="cd-detail-block">
+                                    <h4>Add + LayerNorm (post-norm)</h4>
+                                    <p>
+                                        x = LayerNorm(x + Dropout(attn)). The residual preserves the TCN
+                                        features — attention edits rather than replaces — and LayerNorm
+                                        normalizes each token's 64-dim vector to zero mean / unit variance with a
+                                        learned scale and shift, keeping activations well-conditioned across
+                                        layers.
+                                    </p>
+                                </div>
+                                <div className="cd-detail-block">
+                                    <h4>FeedForward: Linear(64→128) → GELU → Dropout → Linear(128→64)</h4>
+                                    <p>
+                                        Applied independently to every token, with no mixing across time.
+                                        Attention moves information between tokens; the feedforward network then
+                                        processes what each token gathered. The 2× widening gives it room for a
+                                        non-linear transform before projecting back — followed by a second
+                                        Add + LayerNorm to close out the encoder block.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p>
+                        That's as far as this write-up goes for now — the mean-pool, MLP head, and inverse-FFT
+                        deployment step are wired up per the stack diagram above, but I haven't documented them
+                        in the same depth yet. As stated at the top: this is still my attempt at implementing
+                        the paper, and I'll keep updating this page as the training and evaluation results come
+                        in.
+                    </p>
+                </section>
+
+            </div>
+        </div>
+    );
+};
+
+export default PlasmaStabilization;
