@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <!-- <link rel="icon" type="image/svg+xml" href="/vite.svg" /> -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
+  <title>Exploring the Extractive Capabilities of Graph Neural Networks — Thomas Tsuma</title>
+  <!-- Fallback tags for this base template. `npm run build` runs
+       scripts/prerender.js afterward, which overwrites these with real,
+       per-route title/description/OG/Twitter tags and injects prerendered
+       content for crawlers. These defaults only matter if someone runs
+       `vite build` directly without the prerender step. -->  <script type="module" crossorigin src="/personal-portfolio/assets/index-CdQ6ApNK.js"></script>
+  <link rel="stylesheet" crossorigin href="/personal-portfolio/assets/index-DFvgLooU.css">
+
+  <meta name="description" content="Research write-up on the extractive capabilities of graph neural networks." />
+  <link rel="canonical" href="https://tomitsuma.github.io/personal-portfolio/research/gnn/extractive-capabilities/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Exploring the Extractive Capabilities of Graph Neural Networks — Thomas Tsuma" />
+  <meta property="og:description" content="Research write-up on the extractive capabilities of graph neural networks." />
+  <meta property="og:url" content="https://tomitsuma.github.io/personal-portfolio/research/gnn/extractive-capabilities/" />
+  <meta property="og:image" content="https://tomitsuma.github.io/personal-portfolio/profile.jpeg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Exploring the Extractive Capabilities of Graph Neural Networks — Thomas Tsuma" />
+  <meta name="twitter:description" content="Research write-up on the extractive capabilities of graph neural networks." />
+  <meta name="twitter:image" content="https://tomitsuma.github.io/personal-portfolio/profile.jpeg" />
+</head>
+
+<body>
+  <script>(function(){if(!location.hash){location.replace(location.pathname + location.search + '#/research/gnn/extractive-capabilities');}})();</script>
+  <div id="root"><div class="app-wrapper"><nav class="navbar"><div class="container navbar-container"><a class="logo" href="/" data-discover="true"><div class="logo-icon">T</div><span>Thomas</span></a><div class="nav-links "><a class="" href="/" data-discover="true">Home</a><a class="" href="/experience" data-discover="true">Experience</a><a class="" href="/entrepreneurship" data-discover="true">Entrepreneurship</a><a class="" href="/research" data-discover="true">Research</a><a class="" href="/publications" data-discover="true">Publications</a><a class="" href="/homelab" data-discover="true">Home Lab</a></div><div class="hamburger"><i class="lni lni-menu"></i></div></div></nav><main class="main-content"><div class="page-container container animate-fade-in"><div class="research-header"><h1 class="page-title">EXPLORING THE EXTRACTIVE CAPABILITIES OF GRAPH NEURAL NETWORKS</h1><div class="post-meta"><span class="post-date">February 2026</span><div class="post-tags"><span>#GraphNeuralNetworks</span><span>#EvidenceExtraction</span><span>#Research</span></div></div></div><div class="research-content"><section class="research-section"><p class="intro-text">I have based my current line of research on the notion that a wide variety of things can be represented as graphs. Take for example road networks whose cities serve as vertices and the roads connecting them being the edges. Social networks with users serving as nodes and friendships representing edges between them. Perhaps an example that is as close to home as can be is the concept of a neural network itself (both Biological and AI) with neurons connected in a graph like structure.</p><p class="intro-text">My aim is to explore the ability to present data presented in text or tabular format as graphs and to perform several reasoning based tasks by extracting the appropriate information from the penultimate graph representation.</p></section><section class="research-section"><h2>GRAPH REPRESENTATION OF TEXT</h2><p>A piece of text can be meant to address a particular set of themes or topics by combining words into sentences, sentences into paragraphs, paragraphs into sections, and sections into an entire story. Take for example the following block of text:</p><div class="table-representation-container"><div class="source-header"><i class="lni lni-file-empty"></i><span>Source Document Snippet</span></div><div class="tabular-text">11 Intangible assets (continued)<br/>(a) Intangible assets<br/>RIGHTS AND LICENCES<br/>Certain licences that NEXTDC possesses have an indefinite useful life and are carried at cost less impairment losses and are subject to impairment review at least annually and whenever there is an indication that it may be impaired. Other licences that NEXTDC acquires are carried at cost less accumulated amortisation and accumulated impairment losses. Amortisation is recognised on a straight-line basis over the estimated useful life. The estimated useful life and amortisation method are reviewed at the end of each annual reporting period.<br/>INTERNALLY GENERATED SOFTWARE<br/>Internally developed software is capitalised at cost less accumulated amortisation. Amortisation is calculated using the straight-line basis over the asset’s useful economic life which is generally two to three years. Their useful lives and potential impairment are reviewed at the end of each financial year.<br/>SOFTWARE UNDER DEVELOPMENT<br/>Costs incurred in developing products or systems and costs incurred in acquiring software and licenses that will contribute to future period financial benefits through revenue generation and/or cost reduction are capitalised to software and systems. Costs capitalised include external direct costs of materials and services and employee costs. Assets in the course of construction include only those costs directly attributable to the development phase and are only recognised following completion of technical feasibility and where the Group has an intention and ability to use the asset.</div></div><p>This can be broken down into semantically sound segments as follows:</p><div class="json-block"><div class="source-header"><i class="lni lni-code"></i><span>JSON Representation</span></div><pre>[
+  {
+    &quot;uid&quot;: &quot;1ef0dbdd-15d0-4577-b068-dca80af4f851&quot;,
+    &quot;order&quot;: 1,
+    &quot;text&quot;: &quot;11 Intangible assets (continued)&quot;
+  },
+  {
+    &quot;uid&quot;: &quot;87193521-f886-49d3-b059-f8e7f5fc7dc1&quot;,
+    &quot;order&quot;: 2,
+    &quot;text&quot;: &quot;(a) Intangible assets&quot;
+  },
+  {
+    &quot;uid&quot;: &quot;1ef948be-979b-4ac2-9593-67114ccef125&quot;,
+    &quot;order&quot;: 3,
+    &quot;text&quot;: &quot;RIGHTS AND LICENCES&quot;
+  },
+  {
+    &quot;uid&quot;: &quot;5874de4f-3b36-4659-ad37-059679ef445d&quot;,
+    &quot;order&quot;: 4,
+    &quot;text&quot;: &quot;Certain licences that NEXTDC possesses have an indefinite useful life and are carried at cost less impairment losses and are subject to impairment review at least annually and whenever there is an indication that it may be impaired.&quot;
+  },
+  {
+    &quot;uid&quot;: &quot;faa001e2-1bc2-446b-9c2c-9d4479013962&quot;,
+    &quot;order&quot;: 5,
+    &quot;text&quot;: &quot;Other licences that NEXTDC acquires are carried at cost less accumulated amortisation and accumulated impairment losses. Amortisation is recognised on a straight-line basis over the estimated useful life. The estimated useful life and amortisation method are reviewed at the end of each annual reporting period.&quot;
+  },
+  {
+    &quot;uid&quot;: &quot;82ad7605-6ce3-40a1-919f-a8c7b3ca36ab&quot;,
+    &quot;order&quot;: 6,
+    &quot;text&quot;: &quot;INTERNALLY GENERATED SOFTWARE&quot;
+  },
+  {
+    &quot;uid&quot;: &quot;ddf26912-5783-4b3b-b351-87e91b4a5f5b&quot;,
+    &quot;order&quot;: 7,
+    &quot;text&quot;: &quot;Internally developed software is capitalised at cost less accumulated amortisation. Amortisation is calculated using the straight-line basis over the asset’s useful economic life which is generally two to three years. Their useful lives and potential impairment are reviewed at the end of each financial year.&quot;
+  },
+  {
+    &quot;uid&quot;: &quot;ba5b9da5-9420-4035-ae46-6239e4548a9e&quot;,
+    &quot;order&quot;: 8,
+    &quot;text&quot;: &quot;SOFTWARE UNDER DEVELOPMENT&quot;
+  },
+  {
+    &quot;uid&quot;: &quot;5f491929-b2e4-4fad-909b-bb77e3a440b4&quot;,
+    &quot;order&quot;: 9,
+    &quot;text&quot;: &quot;Costs incurred in developing products or systems and costs incurred in acquiring software and licenses that will contribute to future period financial benefits through revenue generation and/or cost reduction are capitalised to software and systems. Costs capitalised include external direct costs of materials and services and employee costs.&quot;
+  },
+  {
+    &quot;uid&quot;: &quot;5f92f6fc-fdca-4f15-bab6-bcecd521d07a&quot;,
+    &quot;order&quot;: 10,
+    &quot;text&quot;: &quot;Assets in the course of construction include only those costs directly attributable to the development phase and are only recognised following completion of technical feasibility and where the Group has an intention and ability to use the asset.&quot;
+  }
+]</pre></div><p>Our aim then becomes not just to have the information split into semantically-sound segments, but to ensure that we accurately connect ideas and steps. This is where the concept of a Graph comes in. The question then becomes, “How do we introduce connectivity(edges) between these sentences(nodes).</p></section><section class="research-section"><h2>GRAPH REPRESENTATION OF TABLES</h2><p>Tabular data as well can and should be represented as graphs. Take the following table:</p><div class="research-table-wrapper"><table class="research-table"><thead><tr><th>Movements</th><th>Rights and licenses (<div id="root"></div>#x27;000)</th><th>Internally generated software (<div id="root"></div>#x27;000)</th><th>Software under development (<div id="root"></div>#x27;000)</th><th>Total (<div id="root"></div>#x27;000)</th></tr></thead><tbody><tr><td colSpan="5"><strong>At 30 June 2019</strong></td></tr><tr><td>Cost</td><td>13</td><td>12,961</td><td>16,284</td><td>29,259</td></tr><tr><td>Accumulated amortisation</td><td>-</td><td>-5,580</td><td>-</td><td>-5,580</td></tr><tr><td>Netbook amount</td><td>13</td><td>7,381</td><td>16,284</td><td>23,678</td></tr><tr><td colSpan="5"><strong>30-Jun-18</strong></td></tr><tr><td>Opening net book amount at 1 July 2017</td><td>43</td><td>442</td><td>8,053</td><td>8,538</td></tr><tr><td>Additions – externally acquired</td><td>13</td><td>-</td><td>5,253</td><td>5,266</td></tr><tr><td>Additions – internally developed</td><td>-</td><td>-</td><td>1,256</td><td>1,256</td></tr><tr><td>Amortisation</td><td>-43</td><td>-1,746</td><td>-</td><td>-1,789</td></tr><tr><td>Transfers</td><td>-</td><td>7,563</td><td>-7,563</td><td>-</td></tr><tr><td>Transfer between classes</td><td>-</td><td>744</td><td>-</td><td>744</td></tr><tr><td>Disposals</td><td>-</td><td>-618</td><td>-490</td><td>-1,108</td></tr><tr><td>Closing net book amount</td><td>13</td><td>6,385</td><td>6,509</td><td>12,907</td></tr><tr><td colSpan="5"><strong>At 30 June 2018</strong></td></tr><tr><td>Cost</td><td>104</td><td>9,555</td><td>6,509</td><td>16,168</td></tr><tr><td>Accumulated amortisation</td><td>-91</td><td>-3,170</td><td>-</td><td>-3,261</td></tr><tr><td>Net book amount</td><td>13</td><td>6,385</td><td>6,509</td><td>12,907</td></tr></tbody></table></div><p style="margin-top:2rem">While it may be much more complicated to determine how to structure a table such as this as a graph, we could simply decide to link each cell node to its respective column node and at each row level, link each cell node to every other cell node at that level. The relevance of this method will become apparent when we discuss adjacency.</p></section><div class="summary-card"><h2>SUMMARY</h2><p>The aim of this piece was to simply introduce the subject of my research. As you can see, there are no technical terminologies or methods defined. Next will be a definition of terms.</p></div></div></div></main><footer class="footer"><div class="container footer-content"><div class="footer-logo"><span>Thomas Tsuma</span></div><div class="footer-links"><a href="https://www.linkedin.com/in/tomitsuma" target="_blank" rel="noopener noreferrer">LinkedIn</a><a href="https://github.com/TomiTsuma" target="_blank" rel="noopener noreferrer">GitHub</a><a href="mailto:tommytsuma7@gmail.com">Email</a></div><div class="copyright">© <!-- -->2026<!-- --> Thomas Tsuma. All rights reserved.</div></div></footer></div></div>
+</body>
+
+</html>

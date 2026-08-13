@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://tomitsuma.github.io/personal-portfolio/sitemap.xml
