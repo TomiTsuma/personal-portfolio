@@ -41,9 +41,11 @@ const PlasmaStabilization = () => {
                 <section className="cd-section">
                     <h2>What Is Plasma?</h2>
                     <p>
-                        This is my attempt to implement the neural network architecture proposed in the paper{' '}
+                        This implements the neural network architecture proposed in the paper{' '}
                         <em>Provable Imitation Learning for Control of Instability in Partially-Observed
-                        Vlasov–Poisson Equations</em> (arXiv:2605.05081v1).
+                        Vlasov–Poisson Equations</em> (arXiv:2605.05081v1): a causal TCN and Transformer
+                        controller trained to reproduce the paper's imitation-learning result for stabilizing
+                        a kinetic plasma instability from four sparse density sensors.
                     </p>
                     <p>
                         The aim of this study is to find ways to keep plasma stable — i.e. hold it near a
@@ -920,11 +922,9 @@ Lᵣₑₗ = (1/K)·Σⱼ Σₖ wₖ·|(ĉₖ,ⱼ − cₖ,ⱼ)/cₖ,ⱼ|²`}</c
                     </div>
 
                     <p>
-                        That's as far as this write-up goes for now — the mean-pool, MLP head, and inverse-FFT
-                        deployment step are wired up per the stack diagram above, but I haven't documented them
-                        in the same depth yet. As stated at the top: this is still my attempt at implementing
-                        the paper, and I'll keep updating this page as the training and evaluation results come
-                        in.
+                        The mean-pool, MLP head, and inverse-FFT deployment step are wired up per the stack
+                        diagram above. This write-up will keep expanding with training and evaluation results
+                        as they come in.
                     </p>
                 </section>
 

@@ -67,6 +67,26 @@
     margin-bottom: 3rem;
 }
 
+.resume-variants {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-top: -1.5rem;
+    margin-bottom: 2.5rem;
+}
+
+.resume-variants a {
+    color: var(--text-muted);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.resume-variants a:hover {
+    color: var(--primary);
+}
+
 .social-links {
     display: flex;
     align-items: center;

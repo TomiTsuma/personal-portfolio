@@ -12,21 +12,29 @@ const Home = () => {
 
                     <h1>
                         Machine Learning Engineer <br />
-                        Based in <span className="text-primary">Nairobi, Kenya</span>
+                        Based in <span className="text-primary">Malaysia</span>
                     </h1>
 
                     <p className="hero-description">
-                        I'm a Machine Learning Engineer passionate about building local capacity and creating designs that not only meet functional requirements but also delight users.
-                        Specializing in LLMs, GNNs, and automated data platforms.
+                        I'm an ML engineer working on generative and graph neural architectures for molecular
+                        design, and physics-informed learning for scientific and engineering systems — spanning
+                        de novo drug discovery, plasma control, and process simulation.
                     </p>
 
                     <div className="hero-actions">
                         <a href="mailto:tommytsuma7@gmail.com" className="btn btn-primary">
                             Get In Touch <i className="lni lni-arrow-right"></i>
                         </a>
-                        <a href="./Thomas%20Amogolla%20Tsuma_RESUME.pdf" target="_blank" className="btn btn-outline" download="Thomas_Amogolla_Tsuma_RESUME.pdf">
+                        <a href={`${import.meta.env.BASE_URL}Thomas_Tsuma_Resume_Research_Scientist.pdf`} target="_blank" className="btn btn-outline" download="Thomas_Tsuma_Resume_Research_Scientist.pdf">
                             Download CV <i className="lni lni-download"></i>
                         </a>
+                    </div>
+
+                    <div className="resume-variants">
+                        Also available:
+                        <a href={`${import.meta.env.BASE_URL}Thomas_Tsuma_Resume_Applied_ML.pdf`} target="_blank" download="Thomas_Tsuma_Resume_Applied_ML.pdf">Applied ML resume</a>
+                        <span aria-hidden="true">·</span>
+                        <a href={`${import.meta.env.BASE_URL}Thomas_Tsuma_CV_PhD.pdf`} target="_blank" download="Thomas_Tsuma_CV_PhD.pdf">PhD CV</a>
                     </div>
 
                     <div className="social-links">
@@ -40,7 +48,7 @@ const Home = () => {
                 <div className="hero-image animate-fade-in">
                     <div className="image-wrapper">
                         {/* Placeholder for user image - user should replace this */}
-                        <img src="./profile.jpeg" alt="Thomas Tsuma" />
+                        <img src={`${import.meta.env.BASE_URL}profile.jpeg`} alt="Thomas Tsuma" />
                         <div className="decorative-shape"></div>
                         <div className="scroll-down">
                             <div className="circle-text">

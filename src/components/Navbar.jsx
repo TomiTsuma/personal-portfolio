@@ -27,6 +27,7 @@ const Navbar = () => {
           <Link to="/experience" className={isActive('/experience')} onClick={() => setIsOpen(false)}>Experience</Link>
           <Link to="/entrepreneurship" className={isActive('/entrepreneurship')} onClick={() => setIsOpen(false)}>Entrepreneurship</Link>
           <Link to="/research" className={isActive('/research')} onClick={() => setIsOpen(false)}>Research</Link>
+          <Link to="/publications" className={isActive('/publications')} onClick={() => setIsOpen(false)}>Publications</Link>
           <Link to="/homelab" className={isActive('/homelab')} onClick={() => setIsOpen(false)}>Home Lab</Link>
         </div>
 
